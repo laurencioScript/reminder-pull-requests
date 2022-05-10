@@ -1,0 +1,33 @@
+{
+  "name": "reminder-pull-request",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index",
+    "swagger-autogen": "node swagger.js",
+    "test": "jest  --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "camelcase-keys": "^7.0.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "handlebars": "^4.7.7",
+    "moment": "^2.29.1",
+    "momentjs": "^2.0.0",
+    "slack": "^11.0.2",
+    "snakecase-keys": "^4.0.2",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.6",
+    "swagger-autogen": "^2.12.4"
+  }
+}

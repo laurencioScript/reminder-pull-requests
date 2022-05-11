@@ -26,7 +26,7 @@ async function publishMessage(channelId, message) {
 
     const result = await Slack.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
-      channel: channelId,
+      channel: process.env.SLACK_CHANNEL_ALERT_ID,
       text: message  
     });
     

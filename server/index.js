@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const routes = Router();
-const schedule = require('./schedule');
+const { schedule, resetQueue, getQueue } = require('./schedule');
 
 routes.get('/ping', async  (request, response) => {
   try {
@@ -59,6 +59,37 @@ routes.post('/webhooks', async (request, response) => {
   }
   
 })
+
+routes.get('/reset', async (request, response) => {
+  try {
+    // #swagger.tags = ['Slack']
+    
+    resetQueue()
+
+    return response.status(200).send({reset:true});
+
+  }
+  catch(e){
+    console.log('>>> error', e);
+    return response.status(400).send(e);
+  }
+  
+})
+
+routes.get('/queue', async (request, response) => {
+  try {
+    // #swagger.tags = ['Slack']
+
+    return response.status(200).send(getQueue());
+
+  }
+  catch(e){
+    console.log('>>> error', e);
+    return response.status(400).send(e);
+  }
+  
+})
+
 
 
 module.exports = routes;

@@ -32,13 +32,19 @@ routes.post('/webhooks', async (request, response) => {
     
     const event = request.body.event;
     
-    if(process.env.SLACK_CHANNEL_ID != event.channel || event.subtype){
+    
+    if(process.env.SLACK_CHANNEL_ID != event.channel ){
         return response.status(300).send('channel invalid');
     }
     
-    const message = request.body.event.text;  
-    const channelId = request.body.event.channel;
-    const timestamp = request.body.event.ts;
+
+    if(event.subtype && event.subtype != 'message_changed'){
+      return response.status(300).send('channel invalid');
+    }
+    
+    const message = event.subtype == 'message_changed' ? event.message.text  : event.text;  
+    const channelId = event.channel;
+    const timestamp = event.subtype == 'message_changed' ? event.message.ts  : event.ts;
     const contentPR = ['https://github.com', 'https://bitbucket.org']
     if(contentPR.find(c => !!~message.indexOf(c))){
         schedule({ channelId, ts : timestamp})

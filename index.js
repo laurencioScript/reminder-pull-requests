@@ -10,6 +10,7 @@ try {
 //   server.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
   server.use(routes);
   server.listen(process.env.API_PORT, ()=> console.log(`Server Online - ${process.env.API_PORT}`));
+  console.log('>>> minutesDelay', minutesDelay);
 } catch (e) {
   console.log(`Server Offline - ${process.env.API_PORT}`);
   console.log('>>> Error',e);

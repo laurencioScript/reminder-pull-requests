@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const routes = Router();
-const { schedule, resetQueue, getQueue } = require("./schedule");
+const SchedulePullRequets = require("./services/schedule.service");
 
 routes.get("/ping", async (request, response) => {
   // #swagger.tags = ['Development']
@@ -57,7 +57,9 @@ routes.post("/webhooks", async (request, response) => {
       return;
     }
 
-    return response.status(200).send(schedule({ channelId, ts: timestamp }));
+    return response
+      .status(200)
+      .send(SchedulePullRequets.schedule({ channelId, ts: timestamp }));
   } catch (e) {
     console.log(">>> error", e);
     return response.status(400).send(e);
@@ -68,7 +70,7 @@ routes.get("/reset", async (request, response) => {
   try {
     // #swagger.tags = ['Pull Request Management']
 
-    resetQueue();
+    SchedulePullRequets.resetQueue();
 
     return response.status(200).send({ reset: true });
   } catch (e) {
@@ -81,7 +83,7 @@ routes.get("/queue", async (request, response) => {
   try {
     // #swagger.tags = ['Pull Request Management']
 
-    return response.status(200).send(getQueue());
+    return response.status(200).send(SchedulePullRequets.getQueue());
   } catch (e) {
     console.log(">>> error", e);
     return response.status(400).send(e);

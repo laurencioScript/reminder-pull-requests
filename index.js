@@ -3,7 +3,7 @@ const swaggerUi = require("swagger-ui-express");
 const express = require("express");
 
 const swaggerFile = require("./swagger-output.json");
-require("./server/swagger");
+require("./server/util/swagger");
 const routes = require("./server");
 
 try {
@@ -15,7 +15,7 @@ try {
   server.listen(process.env.API_PORT, () =>
     console.log(`Server Online - ${process.env.API_PORT}`)
   );
-  console.log(">>> ", { minutesDelay: process.env.DELAY });
+  console.log(">>> Config server", { minutesDelay: process.env.DELAY });
 } catch (e) {
   console.log(">>> Server Error", e);
 }

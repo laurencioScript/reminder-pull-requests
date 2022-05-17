@@ -3,8 +3,12 @@ const routes = Router();
 const { schedule, resetQueue, getQueue } = require("./schedule");
 
 routes.get("/ping", async (request, response) => {
+  // #swagger.tags = ['Development']
   try {
-    return response.send("pong");
+    return response.send({
+      status: "success",
+      data: "ping",
+    });
   } catch (error) {
     return response.send("deu ruim");
   }
@@ -20,6 +24,7 @@ routes.post("/verification", function (req, res) {
 });
 
 routes.post("/webhooks", async (request, response) => {
+  // #swagger.tags = ['Slack']
   try {
     const typeEvent = request.body.type;
 
@@ -61,7 +66,7 @@ routes.post("/webhooks", async (request, response) => {
 
 routes.get("/reset", async (request, response) => {
   try {
-    // #swagger.tags = ['Slack']
+    // #swagger.tags = ['Pull Request Management']
 
     resetQueue();
 
@@ -74,7 +79,7 @@ routes.get("/reset", async (request, response) => {
 
 routes.get("/queue", async (request, response) => {
   try {
-    // #swagger.tags = ['Slack']
+    // #swagger.tags = ['Pull Request Management']
 
     return response.status(200).send(getQueue());
   } catch (e) {

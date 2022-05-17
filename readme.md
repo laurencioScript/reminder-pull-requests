@@ -3,6 +3,7 @@
 ## How run project ? | Como rodar o projeto ?
 
 > npm run dev
+
 ## Environment Variable | Variável de Ambiente
 
 - SLACK_CHANNEL_ID

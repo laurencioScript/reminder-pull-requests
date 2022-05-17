@@ -1,48 +1,57 @@
 const minutesDelay = process.env.DELAY || 5;
 const delay = minutesDelay * 60 * 1000;
-const { getLinkMessage, publishMessage, readMessage} = require('./slack.api');
-const reactions = ['pr_approved', 'pr_reviewing', 'pr_disapproved'];
+const { getLinkMessage, publishMessage, readMessage } = require("./slack.api");
+const reactions = ["pr_approved", "pr_reviewing", "pr_disapproved"];
 let queuePR = [];
 
 async function schedule({ channelId, ts }) {
-    if(queuePR.find(prId => prId == ts)){
-        return
+  if (queuePR.find((prId) => prId == ts)) {
+    return;
+  }
+  queuePR.push(ts);
+  setTimeout(async () => {
+    const oldMessage = await readMessage(channelId, ts);
+
+    if (oldMessage.ts != ts) {
+      return popQueue(ts);
     }
-    queuePR.push(ts)
-    setTimeout(async () => {
-    
-        const oldMessage = await readMessage(channelId, ts);
-                
-        if(oldMessage.ts != ts){
-            return popQueue(ts)
-        }
 
-        oldMessage.reactions = oldMessage.reactions && oldMessage.reactions.length ? oldMessage.reactions : [];
+    oldMessage.reactions =
+      oldMessage.reactions && oldMessage.reactions.length
+        ? oldMessage.reactions
+        : [];
 
-        if(reactions.find(react => oldMessage.reactions.find(r => r.name == react))){
-            return popQueue(ts)
-        }
-    
-        await publishMessage(channelId, `<${process.env.SLACK_GROUP_ID}> This pull-request timed out. ${getLinkMessage({ channelId, ts})}`);
+    if (
+      reactions.find((react) =>
+        oldMessage.reactions.find((r) => r.name == react)
+      )
+    ) {
+      return popQueue(ts);
+    }
 
-        popQueue(ts);
+    await publishMessage(
+      channelId,
+      `<${
+        process.env.SLACK_GROUP_ID
+      }> This pull-request timed out. ${getLinkMessage({ channelId, ts })}`
+    );
 
-        schedule({ channelId, ts });
-    
-    } , delay)
+    popQueue(ts);
+
+    schedule({ channelId, ts });
+  }, delay);
 }
 
-function popQueue(ts){
-    queuePR = queuePR.filter(prId => prId != ts)
+function popQueue(ts) {
+  queuePR = queuePR.filter((prId) => prId != ts);
 }
 
-function getQueue(){
-    return queuePR;
+function getQueue() {
+  return queuePR;
 }
 
-function resetQueue(){
-    queuePR = [];
+function resetQueue() {
+  queuePR = [];
 }
 
 module.exports = { schedule, resetQueue, getQueue };
-

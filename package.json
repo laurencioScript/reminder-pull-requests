@@ -7,7 +7,11 @@
     "start": "node index",
     "dev": "nodemon index",
     "swagger-autogen": "node swagger.js",
-    "test": "jest  --watch"
+    "test": "jest  --watch",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "keywords": [],
   "author": "",
@@ -25,8 +29,12 @@
     "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
+    "eslint": "^8.15.0",
+    "husky": "^8.0.1",
     "jest": "^27.3.1",
+    "lint-staged": "^12.4.1",
     "nodemon": "^2.0.12",
+    "prettier": "2.6.2",
     "supertest": "^6.1.6",
     "swagger-autogen": "^2.12.4"
   }

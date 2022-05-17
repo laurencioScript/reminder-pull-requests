@@ -22,7 +22,6 @@ routes.post('/verification', function (req, res) {
   
 routes.post('/webhooks', async (request, response) => {
   try {
-    // #swagger.tags = ['Slack']
     
     const typeEvent = request.body.type;
     
@@ -36,21 +35,25 @@ routes.post('/webhooks', async (request, response) => {
     if(process.env.SLACK_CHANNEL_ID != event.channel ){
         return response.status(300).send('channel invalid');
     }
-    
 
     if(event.subtype && event.subtype != 'message_changed'){
       return response.status(300).send('channel invalid');
     }
     
-    const message = event.subtype == 'message_changed' ? event.message.text  : event.text;  
-    const channelId = event.channel;
-    const timestamp = event.subtype == 'message_changed' ? event.message.ts  : event.ts;
-    const contentPR = ['https://github.com', 'https://bitbucket.org']
-    if(contentPR.find(c => !!~message.indexOf(c))){
-        schedule({ channelId, ts : timestamp})
+    if(event.parent_user_id){
+      return response.status(300).send('message in sub thread is invalid');
     }
 
-    return response.status(200).send();
+    const message = event.subtype == 'message_changed' ? event.message.text  : event.text;  
+    const contentPR = ['@ignore-bot'];
+    const channelId = event.channel;
+    const timestamp = event.subtype == 'message_changed' ? event.message.ts  : event.ts;
+
+    if(contentPR.find(c => !!~message.indexOf(c))){
+        return 
+    }
+    
+    return response.status(200).send(schedule({ channelId, ts : timestamp}));
 
   }
   catch(e){

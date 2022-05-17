@@ -12,17 +12,15 @@ async function schedule({ channelId, ts }) {
     setTimeout(async () => {
     
         const oldMessage = await readMessage(channelId, ts);
-
+                
         if(oldMessage.ts != ts){
-            popQueue(ts)
-            return
+            return popQueue(ts)
         }
 
         oldMessage.reactions = oldMessage.reactions && oldMessage.reactions.length ? oldMessage.reactions : [];
 
         if(reactions.find(react => oldMessage.reactions.find(r => r.name == react))){
-            popQueue(ts)
-            return
+            return popQueue(ts)
         }
     
         await publishMessage(channelId, `<${process.env.SLACK_GROUP_ID}> This pull-request timed out. ${getLinkMessage({ channelId, ts})}`);

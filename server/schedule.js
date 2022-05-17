@@ -12,6 +12,12 @@ async function schedule({ channelId, ts }) {
     setTimeout(async () => {
     
         const oldMessage = await readMessage(channelId, ts);
+
+        if(oldMessage.ts != ts){
+            popQueue(ts)
+            return
+        }
+
         oldMessage.reactions = oldMessage.reactions && oldMessage.reactions.length ? oldMessage.reactions : [];
 
         if(reactions.find(react => oldMessage.reactions.find(r => r.name == react))){

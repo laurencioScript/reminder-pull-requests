@@ -10,7 +10,8 @@
     "test": "jest  --watch",
     "prepare": "husky install",
     "pm2:start": "pm2 start index.js --name reminder-pull-request",
-    "pm2:delete": "pm2 delete reminder-pull-request"
+    "pm2:delete": "pm2 delete reminder-pull-request",
+    "pm2:log": "pm2 logs reminder-pull-request"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

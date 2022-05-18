@@ -31,21 +31,18 @@ class SchedulePullRequets {
     setTimeout(async () => {
       const oldMessage = await readMessage(channelId, ts);
 
-      if (oldMessage.ts != ts) {
-        return popQueue(ts);
+      const isDiffMessage = oldMessage.ts != ts;
+
+      if (!oldMessage.reactions || !Array.isArray(oldMessage.reactions)) {
+        oldMessage.reactions = [];
       }
 
-      oldMessage.reactions =
-        oldMessage.reactions && oldMessage.reactions.length
-          ? oldMessage.reactions
-          : [];
+      const hasReaction = this.reactions.find((react) =>
+        oldMessage.reactions.find((r) => r.name == react)
+      );
 
-      if (
-        this.reactions.find((react) =>
-          oldMessage.reactions.find((r) => r.name == react)
-        )
-      ) {
-        return popQueue(ts);
+      if (hasReaction || isDiffMessage) {
+        return this.popQueue(ts);
       }
 
       await publishMessage(
@@ -55,9 +52,9 @@ class SchedulePullRequets {
         }> This pull-request timed out. ${getLinkMessage({ channelId, ts })}`
       );
 
-      popQueue(ts);
+      this.popQueue(ts);
 
-      schedule({ channelId, ts });
+      this.schedule({ channelId, ts });
     }, this.delay);
   }
 

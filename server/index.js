@@ -48,12 +48,12 @@ routes.post("/webhooks", async (request, response) => {
 
     const message =
       event.subtype == "message_changed" ? event.message.text : event.text;
-    const contentPR = ["@ignore-bot"];
+    const contentPR = ["github.com", "bitbucket.org"];
     const channelId = event.channel;
     const timestamp =
       event.subtype == "message_changed" ? event.message.ts : event.ts;
 
-    if (contentPR.find((c) => !!~message.indexOf(c))) {
+    if (!contentPR.find((c) => !!~message.indexOf(c))) {
       return;
     }
 

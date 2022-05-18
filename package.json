@@ -8,7 +8,9 @@
     "dev": "nodemon index",
     "swagger-autogen": "node swagger.js",
     "test": "jest  --watch",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pm2:start": "pm2 start index.js --name reminder-pull-request",
+    "pm2:delete": "pm2 delete reminder-pull-request"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

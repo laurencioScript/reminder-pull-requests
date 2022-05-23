@@ -48,7 +48,7 @@ routes.post("/webhooks", async (request, response) => {
 
     const message =
       event.subtype == "message_changed" ? event.message.text : event.text;
-    const contentPR = ["github.com", "bitbucket.org"];
+    const contentPR = ["Link abaixo na thread"];
     const channelId = event.channel;
     const timestamp =
       event.subtype == "message_changed" ? event.message.ts : event.ts;
